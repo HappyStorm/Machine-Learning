@@ -17,7 +17,7 @@ data = data_format
 
 
 # ### 2. Setup Environment Parameters
-fold = 6 # for N-Fold Cross Validation
+fold = 12 # for N-Fold Cross Validation
 num_type = len(data)
 hr_len = 7
 RMSE_BEST = 100
@@ -42,9 +42,10 @@ XY_ALL = zip(X_ALL, Y_ALL)
 np.random.shuffle(XY_ALL)
 X_ALL, Y_ALL = zip(*XY_ALL)
 X_ALL = np.array(X_ALL)
+Y_ALL = np.array(Y_ALL)
 
 
-# ### 4. Create Training & Validation Datasets + Calculate w & b + Validate the RMSE
+# ### 4. Create Training & Validation Datasets + Calculate w & b + RMSE
 for cross_index in range(fold):
     X_TRAIN = []
     Y_TRAIN = []
@@ -88,8 +89,8 @@ for cross_index in range(fold):
         DB = -2 * np.sum(ERR)
 
         # Compute Loss & Print
-#         J = np.sum(ERR ** 2)
-#         print "Epoch %s | Loss: %.7f" % (i, J)
+        J = np.sum(ERR ** 2)
+        # print "Epoch %s | Loss: %.7f" % (i, J)
 
         # Regularization
 #         DW += Lambda * 2 * W
