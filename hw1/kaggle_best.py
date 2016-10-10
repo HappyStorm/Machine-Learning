@@ -104,13 +104,13 @@ while RMSE_BEST > 5 and t < 200000:
 #     W = W - (adam_alpha*Wmthat) / (np.sqrt(Wvthat) + eps)
 #     b = b - (adam_alpha*Bmthat) / (np.sqrt(Bvthat) + eps)
 
-    WX_VALIDATION = np.dot(X_VALIDATION, W)
-    SUMSQERR = np.sum((Y_VALIDATION - (b + WX_VALIDATION)) ** 2)
-    RMSE_VALIDATION = np.sqrt(SUMSQERR/X_VALIDATION.shape[0])
-    if RMSE_VALIDATION < RMSE_BEST:
-        RMSE_BEST = RMSE_VALIDATION
-        W_BEST = W
-        B_BEST = b
+WX_VALIDATION = np.dot(X_VALIDATION, W)
+SUMSQERR = np.sum((Y_VALIDATION - (b + WX_VALIDATION)) ** 2)
+RMSE_VALIDATION = np.sqrt(SUMSQERR/X_VALIDATION.shape[0])
+if RMSE_VALIDATION < RMSE_BEST:
+    RMSE_BEST = RMSE_VALIDATION
+    W_BEST = W
+    B_BEST = b
 #     print 'RMSE: %.7lf' % (RMSE_VALIDATION)
 
 # print 'Best RMSE: %.7lf' % RMSE_BEST
