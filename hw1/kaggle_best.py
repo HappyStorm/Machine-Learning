@@ -67,7 +67,7 @@ Bvt = 0
 t = 0
 eps = 1e-8
 epoch = 10000
-while RMSE_BEST > 5 and t < 200000:
+while RMSE_BEST > 5 and t < 150000:
     t += 1
     WX_TRAIN = np.dot(X_TRAIN, W)
     ERR = Y_TRAIN - (b + WX_TRAIN)
