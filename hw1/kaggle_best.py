@@ -6,7 +6,7 @@ import sys, csv, random
 import numpy as np
 import scipy as sp
 
-t_list = [0, 4, 5, 6, 7, 8, 9, 12, 13]
+t_list = [0, 4, 5, 6, 7, 8, 9, 12]
 data = np.genfromtxt('./train.csv', delimiter=',', dtype=None, skip_header=1) # (4320, 27)
 row, col = np.shape(data)
 data_format = [[] for i in range(18)]
@@ -71,7 +71,7 @@ Bvt = 0
 t = 0
 eps = 1e-8
 epoch = 10000
-while RMSE_BEST > 5 and t < 250000:
+while RMSE_BEST > 5 and t < 500000:
     t += 1
     WX_TRAIN = np.dot(X_TRAIN, W)
     ERR = Y_TRAIN - (b + WX_TRAIN)
