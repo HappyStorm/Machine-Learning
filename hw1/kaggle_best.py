@@ -6,7 +6,7 @@ import sys, csv, random
 import numpy as np
 import scipy as sp
 
-t_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13] # len = 12
+t_list = [0, 4, 5, 6, 7, 8, 9, 12, 13]
 data = np.genfromtxt('./train.csv', delimiter=',', dtype=None, skip_header=1) # (4320, 27)
 row, col = np.shape(data)
 data_format = [[] for i in range(18)]
@@ -32,7 +32,11 @@ for month in range(12):
         x = []
         for type_id in t_list:
             for hr in range(hour_start+9-hr_len, hour_start+9):
-                x.append(data[type_id][month*480+hr])
+                if hr >= hour_start+9-2:
+                    x.append(data[type_id][month*480+hr])
+                    x.append(data[type_id][month*480+hr]**2)
+                else:
+                    x.append(data[type_id][month*480+hr])
         Y_ALL.append(data[9][month*480+hour_start+9])
         X_ALL.append(x)
 
@@ -56,7 +60,7 @@ SUM_SQDW = np.zeros(X_TRAIN.shape[1])
 SUM_SQDB = 0.
 ada_alpha = 1.
 nor_alpha = 0.000000001
-Lambda = 10
+Lambda = 5
 adam_alpha = 0.001
 beta1 = 0.9
 beta2 = 0.999
@@ -67,7 +71,7 @@ Bvt = 0
 t = 0
 eps = 1e-8
 epoch = 10000
-while RMSE_BEST > 5 and t < 150000:
+while RMSE_BEST > 5 and t < 250000:
     t += 1
     WX_TRAIN = np.dot(X_TRAIN, W)
     ERR = Y_TRAIN - (b + WX_TRAIN)
@@ -80,17 +84,17 @@ while RMSE_BEST > 5 and t < 150000:
 #     print "Epoch %s | Loss: %.7f" % (i, J)
 
     # Regularization
-#     DW += Lambda * 2 * W
+    DW += Lambda * 2 * W
 
     # Normal
-    W = W - nor_alpha * DW # / X_TRAIN.shape[0]
-    b = b - nor_alpha * DB # / X_TRAIN.shape[0]
+    # W = W - nor_alpha * DW # / X_TRAIN.shape[0]
+    # b = b - nor_alpha * DB # / X_TRAIN.shape[0]
 
     # Adagrad
-#     SUM_SQDW += np.square(DW)
-#     SUM_SQDB += np.square(DB)
-#     W = W - ada_alpha/np.sqrt(SUM_SQDW) * DW # / X_TRAIN.shape[0]
-#     b = b - ada_alpha/np.sqrt(SUM_SQDB) * DB # / X_TRAIN.shape[0]
+    SUM_SQDW += np.square(DW)
+    SUM_SQDB += np.square(DB)
+    W = W - ada_alpha/np.sqrt(SUM_SQDW) * DW # / X_TRAIN.shape[0]
+    b = b - ada_alpha/np.sqrt(SUM_SQDB) * DB # / X_TRAIN.shape[0]
 
     # Adamgrad
 #     Wmt = beta1 * Wmt + (1-beta1) * DW
@@ -137,7 +141,11 @@ for i in range(num_test):
     x = []
     for type_id in t_list:
         for hr in range(hr_len):
-            x.append(test[type_id][i*hr_len+hr])
+            if hr >= hr_len-2:
+                x.append(test[type_id][i*hr_len+hr])
+                x.append(test[type_id][i*hr_len+hr]**2)
+            else:
+                x.append(test[type_id][i*hr_len+hr])
     X_TEST.append(x)
 X_TEST = np.array(X_TEST)
 
