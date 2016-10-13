@@ -80,13 +80,13 @@ for cross_index in range(fold):
     t = 0
     eps = 1e-8
     epoch = 50000
-    for i in range(epoch):
-        t += 1
-        WX_TRAIN = np.dot(X_TRAIN, W)
-        ERR = Y_TRAIN - (b + WX_TRAIN)
-        X_TRAIN_T = X_TRAIN.T
-        DW = -2 * np.dot(X_TRAIN_T, ERR)
-        DB = -2 * np.sum(ERR)
+    for i in range(epoch): # iteration (default = 50000)
+        t += 1 # time step for admagrad
+        WX_TRAIN = np.dot(X_TRAIN, W) # inner product of weight & data
+        ERR = Y_TRAIN - (b + WX_TRAIN) # error of predicted result (y-(b+wx))
+        X_TRAIN_T = X_TRAIN.T # transpose data for next inner product
+        DW = -2 * np.dot(X_TRAIN_T, ERR) # multiply -X to error formula
+        DB = -2 * np.sum(ERR) # sum the error
 
         # Compute Loss & Print
         J = np.sum(ERR ** 2)
