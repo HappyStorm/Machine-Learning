@@ -42,9 +42,9 @@ def logistic_regression(X_TRAIN, Y_TRAIN):
         DB = -1 * np.sum(ERR)
 
         # Compute Loss & Print
-        if i % 500 == 0:
-            Loss = np.sum(cross_entropy(fwb, Y_TRAIN))
-            print "Iter %7s | Loss: %.7f" % (i, Loss)
+        # if i % 500 == 0:
+        #     Loss = np.sum(cross_entropy(fwb, Y_TRAIN))
+        #     print "Iter %7s | Loss: %.7f" % (i, Loss)
 
         # Regularization
         DW += Lambda * 2 * W
