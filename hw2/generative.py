@@ -6,18 +6,6 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def cross_entropy(fx_n, y_n):
-    ans = []
-    for i in range(fx_n.shape[0]):
-        if np.isclose(fx_n[i], 0.):
-            ans.append(y_n[i] * np.log(fx_n[i] + 1e-3) + (1 - y_n[i]) * np.log(1 - fx_n[i]))
-        elif np.isclose(1 - fx_n[i], 0.):
-            ans.append(y_n[i] * np.log(fx_n[i]) + (1 - y_n[i]) * np.log(1 - fx_n[i] + 1e-3))
-        else:
-            ans.append(y_n[i] * np.log(fx_n[i]) + (1 - y_n[i]) * np.log(1 - fx_n[i]))
-    return -np.array(ans)
-
-
 def read_data(datapath):
     data = np.genfromtxt(datapath, delimiter=',')  # (4001, ID + 57 + label)
     X, Y = [], []
@@ -48,58 +36,9 @@ def gen_cov(X):
     return np.cov(X, rowvar=False)
 
 
-def logistic_regression(X_TRAIN, Y_TRAIN):
-    W, b = np.zeros(X_TRAIN.shape[1]), 0
-    SUM_SQDW, SUM_SQDB = np.zeros(X_TRAIN.shape[1]) + 1, 0
-    norm, adag, adam = 0.00000001, 0.1, 0.01  # adam-default = 0.001
-    beta1, beta2 = 0.9, 0.999
-    Wmt, Wvt = 0, 0
-    Bmt, Bvt = 0, 0
-    epoch, Lambda, t, eps = 10000, 0, 0, 1e-8
-    for i in range(epoch):
-        fwb = sigmoid(np.dot(X_TRAIN, W) + b)
-        ERR = Y_TRAIN - fwb
-        DW = -1 * np.dot(X_TRAIN.T, ERR)
-        DB = -1 * np.sum(ERR)
-
-        # Compute Loss & Print
-        if i % 500 == 0:
-            Loss = np.sum(cross_entropy(fwb, Y_TRAIN))
-            print "Iter %7s | Loss: %.7f" % (i, Loss)
-
-        # Regularization
-        DW += Lambda * 2 * W
-
-        # Normal
-        # W -= norm * DW # / X_TRAIN.shape[0]
-        # b -= norm * DB # / X_TRAIN.shape[0]
-
-        # Adagrad
-        # SUM_SQDW += np.square(DW)
-        # SUM_SQDB += np.square(DB)
-        # W -= adag / np.sqrt(SUM_SQDW) * DW # / X_TRAIN.shape[0]
-        # b -= adag / np.sqrt(SUM_SQDB) * DB # / X_TRAIN.shape[0]
-
-        # Adamgrad
-        t += 1
-        Wmt = beta1 * Wmt + (1 - beta1) * DW
-        Wvt = beta2 * Wvt + (1 - beta2) * np.square(DW)
-        Wmthat = Wmt / (1 - np.power(beta1, t))
-        Wvthat = Wvt / (1 - np.power(beta2, t))
-        Bmt = beta1 * Bmt + (1 - beta1) * DB
-        Bvt = beta2 * Bvt + (1 - beta2) * np.square(DB)
-        Bmthat = Bmt / (1 - np.power(beta1, t))
-        Bvthat = Bvt / (1 - np.power(beta2, t))
-        W -= (adam * Wmthat) / (np.sqrt(Wvthat) + eps)
-        b -= (adam * Bmthat) / (np.sqrt(Bvthat) + eps)
-    return W, b
-
-
 def gen_model(modelpath, u_0, u_1, cov, N_0, N_1):
     inv_cov = np.linalg.inv(cov)
     W = np.dot((u_0 - u_1).T, inv_cov).T
-    # print 'W'
-    # print np.shape(W)
     b = -0.5 * np.dot(np.dot(u_0.T, inv_cov), u_1) + \
          0.5 * np.dot(np.dot(u_1.T, inv_cov), u_1) + \
          np.log(N_0 / N_1)
@@ -146,10 +85,3 @@ if __name__ == '__main__':
         gen_ans(sys.argv[3], X, W, b)
     else:
         pass
-    # X, Y = read_data('./spam_train.csv')
-    # u_0, u_1, N_0, N_1 = gen_mean(X, Y)
-    # cov = gen_cov(X)
-    # gen_model('./generative_model', u_0, u_1, cov, N_0, N_1)
-    # W, b = read_model('./generative_model')
-    # X = read_test('spam_test.csv')
-    # gen_ans('prediction.csv', X, W, b)
