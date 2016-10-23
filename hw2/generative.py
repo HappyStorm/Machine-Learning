@@ -39,7 +39,7 @@ def gen_cov(X):
 def gen_model(modelpath, u_0, u_1, cov, N_0, N_1):
     inv_cov = np.linalg.inv(cov)
     W = np.dot((u_0 - u_1).T, inv_cov).T
-    b = -0.5 * np.dot(np.dot(u_0.T, inv_cov), u_1) + \
+    b = -0.5 * np.dot(np.dot(u_0.T, inv_cov), u_0) + \
          0.5 * np.dot(np.dot(u_1.T, inv_cov), u_1) + \
          np.log(N_0 / N_1)
     with open(modelpath, 'wb') as file:
