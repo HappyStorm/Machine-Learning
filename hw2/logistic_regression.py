@@ -23,7 +23,8 @@ def read_data(datapath):
     #     X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]))
     #     X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]) + map(lambda x: x ** 0.25, row[-10:-1]))
     #     X.append(list(np.sqrt(row[1:-1])) + list(np.square(row[-10:-4])) + list(np.log(row[-4:-1])))
-        X.append(list(np.sqrt(row[1:-1])) + list(np.sqrt(row[-10:-1])) + list(np.log(row[-4:-1])))
+    #     X.append(list(np.sqrt(row[1:-1])) + list(np.sqrt(row[-10:-1])) + list(np.log(row[-4:-1])))
+        X.append(list(np.sqrt(row[1:-1])) + list(np.log(row[-4:-1])))
         Y.append(row[-1])
     X = np.array(X)
     Y = np.array(Y)
@@ -31,12 +32,12 @@ def read_data(datapath):
 
 def logistic_regression(X_TRAIN, Y_TRAIN):
     W, b = np.zeros(X_TRAIN.shape[1]), 0
-    SUM_SQDW, SUM_SQDB = np.zeros(X_TRAIN.shape[1])+1, 0
+    SUM_SQDW, SUM_SQDB = np.zeros(X_TRAIN.shape[1]), 0
     norm, adag, adam = 0.00000001, 1, 0.001 # adam-default = 0.001
     beta1, beta2 = 0.9, 0.999
     Wmt, Wvt = 0, 0
     Bmt, Bvt = 0, 0
-    epoch, Lambda, t, eps = 10000, 0, 0, 1e-8
+    epoch, Lambda, t, eps = 8000, 0, 0, 1e-8
     for i in range(epoch):
         fwb = sigmoid(np.dot(X_TRAIN, W) + b)
         ERR = Y_TRAIN - fwb
@@ -91,7 +92,8 @@ def read_test(testpath):
     #     X_TEST.append(row[1:])
     #     X_TEST.append(list(row[1:]) + map(lambda x: x ** 0.5, row[-9:]))
     #     X_TEST.append(list(np.sqrt(row[1:])) + list(np.square(row[-9:-3])) + list(np.log(row[-3:])))
-        X_TEST.append(list(np.sqrt(row[1:])) + list(np.sqrt(row[-9:])) + list(np.log(row[-3:])))
+    #     X_TEST.append(list(np.sqrt(row[1:])) + list(np.sqrt(row[-9:])) + list(np.log(row[-3:])))
+        X_TEST.append(list(np.sqrt(row[1:])) + list(np.log(row[-3:])))
     X_TEST = np.array(X_TEST)
     return X_TEST
 
