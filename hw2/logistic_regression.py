@@ -20,8 +20,10 @@ def read_data(datapath):
     X, Y = [], []
     for row in data:
     #     X.append(row[1:-1])
-        X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]))
+    #     X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]))
     #     X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]) + map(lambda x: x ** 0.25, row[-10:-1]))
+    #     X.append(list(np.sqrt(row[1:-1])) + list(np.square(row[-10:-4])) + list(np.log(row[-4:-1])))
+        X.append(list(np.sqrt(row[1:-1])) + list(np.sqrt(row[-10:-1])) + list(np.log(row[-4:-1])))
         Y.append(row[-1])
     X = np.array(X)
     Y = np.array(Y)
@@ -30,7 +32,7 @@ def read_data(datapath):
 def logistic_regression(X_TRAIN, Y_TRAIN):
     W, b = np.zeros(X_TRAIN.shape[1]), 0
     SUM_SQDW, SUM_SQDB = np.zeros(X_TRAIN.shape[1])+1, 0
-    norm, adag, adam = 0.00000001, 0.1, 0.01 # adam-default = 0.001
+    norm, adag, adam = 0.00000001, 1, 0.001 # adam-default = 0.001
     beta1, beta2 = 0.9, 0.999
     Wmt, Wvt = 0, 0
     Bmt, Bvt = 0, 0
@@ -54,23 +56,23 @@ def logistic_regression(X_TRAIN, Y_TRAIN):
         # b -= norm * DB # / X_TRAIN.shape[0]
 
         # Adagrad
-        # SUM_SQDW += np.square(DW)
-        # SUM_SQDB += np.square(DB)
-        # W -= adag / np.sqrt(SUM_SQDW) * DW # / X_TRAIN.shape[0]
-        # b -= adag / np.sqrt(SUM_SQDB) * DB # / X_TRAIN.shape[0]
+        SUM_SQDW += np.square(DW)
+        SUM_SQDB += np.square(DB)
+        W -= adag / np.sqrt(SUM_SQDW) * DW # / X_TRAIN.shape[0]
+        b -= adag / np.sqrt(SUM_SQDB) * DB # / X_TRAIN.shape[0]
 
         # Adamgrad
-        t += 1
-        Wmt = beta1 * Wmt + (1-beta1) * DW
-        Wvt = beta2 * Wvt + (1-beta2) * np.square(DW)
-        Wmthat = Wmt / (1-np.power(beta1, t))
-        Wvthat = Wvt / (1-np.power(beta2, t))
-        Bmt = beta1 * Bmt + (1-beta1) * DB
-        Bvt = beta2 * Bvt + (1-beta2) * np.square(DB)
-        Bmthat = Bmt / (1-np.power(beta1, t))
-        Bvthat = Bvt / (1-np.power(beta2, t))
-        W -= (adam*Wmthat) / (np.sqrt(Wvthat) + eps)
-        b -= (adam*Bmthat) / (np.sqrt(Bvthat) + eps)
+        # t += 1
+        # Wmt = beta1 * Wmt + (1-beta1) * DW
+        # Wvt = beta2 * Wvt + (1-beta2) * np.square(DW)
+        # Wmthat = Wmt / (1-np.power(beta1, t))
+        # Wvthat = Wvt / (1-np.power(beta2, t))
+        # Bmt = beta1 * Bmt + (1-beta1) * DB
+        # Bvt = beta2 * Bvt + (1-beta2) * np.square(DB)
+        # Bmthat = Bmt / (1-np.power(beta1, t))
+        # Bvthat = Bvt / (1-np.power(beta2, t))
+        # W -= (adam*Wmthat) / (np.sqrt(Wvthat) + eps)
+        # b -= (adam*Bmthat) / (np.sqrt(Bvthat) + eps)
     return W, b
 
 def gen_model(modelpath, W, b):
@@ -83,11 +85,13 @@ def read_model(modelpath):
     return dic['W'], dic['b']
 
 def read_test(testpath):
-    test = np.genfromtxt(testpath, delimiter=',') # (4320, 11)
+    test = np.genfromtxt(testpath, delimiter=',')
     X_TEST = []
     for row in test:
     #     X_TEST.append(row[1:])
-        X_TEST.append(list(row[1:]) + map(lambda x: x ** 0.5, row[-9:]))
+    #     X_TEST.append(list(row[1:]) + map(lambda x: x ** 0.5, row[-9:]))
+    #     X_TEST.append(list(np.sqrt(row[1:])) + list(np.square(row[-9:-3])) + list(np.log(row[-3:])))
+        X_TEST.append(list(np.sqrt(row[1:])) + list(np.sqrt(row[-9:])) + list(np.log(row[-3:])))
     X_TEST = np.array(X_TEST)
     return X_TEST
 
