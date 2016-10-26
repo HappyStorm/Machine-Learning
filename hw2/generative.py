@@ -10,9 +10,11 @@ def read_data(datapath):
     data = np.genfromtxt(datapath, delimiter=',')  # (4001, ID + 57 + label)
     X, Y = [], []
     for row in data:
-        #     X.append(row[1:-1])
-        X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]))
-        #     X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]) + map(lambda x: x ** 0.25, row[-10:-1]))
+        # X.append(row[1:-1])
+        # X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]))
+        # X.append(list(row[1:-1]) + map(lambda x: x ** 0.5, row[-10:-1]) + map(lambda x: x ** 0.25, row[-10:-1]))
+        X.append(list(np.sqrt(row[1:-1])) + list(np.log(row[-4:-1])))
+        # X.append(list(np.sqrt(row[1:-1])) + list(np.sqrt(row[-10:-1])) + list(np.log(row[-4:-1])))
         Y.append(row[-1])
     X = np.array(X)
     Y = np.array(Y)
@@ -56,8 +58,10 @@ def read_test(testpath):
     test = np.genfromtxt(testpath, delimiter=',')  # (4320, 11)
     X_TEST = []
     for row in test:
-        #     X_TEST.append(row[1:])
-        X_TEST.append(list(row[1:]) + map(lambda x: x ** 0.5, row[-9:]))
+        # X_TEST.append(row[1:])
+        # X_TEST.append(list(row[1:]) + map(lambda x: x ** 0.5, row[-9:]))
+        X_TEST.append(list(np.sqrt(row[1:])) + list(np.log(row[-3:])))
+        # X_TEST.append(list(np.sqrt(row[1:])) + list(np.sqrt(row[-9:])) + list(np.log(row[-3:])))
     X_TEST = np.array(X_TEST)
     return X_TEST
 
@@ -85,3 +89,10 @@ if __name__ == '__main__':
         gen_ans(sys.argv[3], X, W, b)
     else:
         pass
+    # X, Y = read_data('./spam_train.csv')
+    # u_0, u_1, N_0, N_1 = gen_mean(X, Y)
+    # cov = gen_cov(X)
+    # gen_model('./generative_model', u_0, u_1, cov, N_0, N_1)
+    # W, b = read_model('./generative_model')
+    # X = read_test('spam_test.csv')
+    # gen_ans('prediction.csv', X, W, b)
