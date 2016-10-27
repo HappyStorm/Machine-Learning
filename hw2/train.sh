@@ -1,2 +1,2 @@
 #!/bin/sh
-python generative.py $1 $2
+python multi-logistic.py $1 $2
