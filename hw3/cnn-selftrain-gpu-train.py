@@ -17,25 +17,25 @@ session = tf.Session(config=config)
 keras.backend.tensorflow_backend.set_session(session)
 
 
-def plot(history, model_name=''):
-    # summarize history for accuracy
-    plt.plot(history.history['acc'])
-    plt.plot(history.history['val_acc'])
-    plt.title(model_name + ' Model Accuracy')
-    plt.ylabel('accuracy')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig('./img/%s-acc.png' % model_name)
-    plt.cla()
-    # summarize history for loss
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.title(model_name + ' Model Loss')
-    plt.ylabel('loss')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig('./img/%s-loss.png' % model_name)
-    plt.cla()
+# def plot(history, model_name=''):
+#     # summarize history for accuracy
+#     plt.plot(history.history['acc'])
+#     plt.plot(history.history['val_acc'])
+#     plt.title(model_name + ' Model Accuracy')
+#     plt.ylabel('accuracy')
+#     plt.xlabel('epoch')
+#     plt.legend(['train', 'test'], loc='upper left')
+#     plt.savefig('./img/%s-acc.png' % model_name)
+#     plt.cla()
+#     # summarize history for loss
+#     plt.plot(history.history['loss'])
+#     plt.plot(history.history['val_loss'])
+#     plt.title(model_name + ' Model Loss')
+#     plt.ylabel('loss')
+#     plt.xlabel('epoch')
+#     plt.legend(['train', 'test'], loc='upper left')
+#     plt.savefig('./img/%s-loss.png' % model_name)
+#     plt.cla()
 
 def Generator(img_channels, img_rows, img_cols, batch_size, nb_epoch, nb_classes, X_train, Y_train, X_valid, Y_valid, generator):
     model = Sequential()
@@ -76,7 +76,6 @@ def Generator(img_channels, img_rows, img_cols, batch_size, nb_epoch, nb_classes
                 samples_per_epoch=X_train.shape[0]*2,
                 nb_epoch=nb_epoch,
                 validation_data=(X_valid, Y_valid))
-    plot(history, 'Self-Train-Middle')
     return model
 
 def GeneratorRetrain(img_channels, img_rows, img_cols, batch_size, nb_epoch, nb_classes, X_train, Y_train, X_valid, Y_valid, generator):
@@ -118,7 +117,7 @@ def GeneratorRetrain(img_channels, img_rows, img_cols, batch_size, nb_epoch, nb_
                 nb_epoch=nb_epoch,
                 shuffle=True,
                 validation_data=(X_valid, Y_valid))
-    plot(history, 'Self-Train-Final')
+    # plot(history, 'Self-Train')
     return model
 
 def load_data(prefix):
