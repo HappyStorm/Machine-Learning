@@ -97,7 +97,7 @@ def add_noise(X_normal, X_train, X_valid, X_test):
 
 def load_trained_model(modelname, img_channels, img_rows, img_cols):
     encoder = def_encoder(img_channels, img_rows, img_cols)
-    encoder.load_weights(modelname + '.h5')
+    encoder.load_weights(modelname)
     return encoder
 
 def predict(X_train, X_test, encoder, predictname):
