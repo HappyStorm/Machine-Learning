@@ -18,13 +18,13 @@ def load_data(prefix):
 
 def normalize_data(X_normal, X_test, X_unlab):
     label_rgb_mean = np.mean(X_normal, axis=0)
-    X_normal = (X_normal - label_rgb_mean) / 255
-    X_test = (X_test - label_rgb_mean) / 255
+    X_normal = (X_normal - label_rgb_mean) / 255.
+    X_test = (X_test - label_rgb_mean) / 255.
     X_unlab = (X_unlab - label_rgb_mean) / 255.
     return X_normal, X_test, X_unlab
 
 def load_trained_model(modelname):
-    model = load_model(modelname + '.h5')
+    model = load_model(modelname)
     return model
 
 def predict(X_test, model, predictname):
