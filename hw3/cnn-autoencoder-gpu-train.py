@@ -24,25 +24,25 @@ keras.backend.tensorflow_backend.set_session(session)
 
 
 
-def plot(history, model_name=''):
-    # summarize history for accuracy
-    # plt.plot(history.history['acc'])
-    # plt.plot(history.history['val_acc'])
-    # plt.title(model_name + ' Model Accuracy')
-    # plt.ylabel('accuracy')
-    # plt.xlabel('epoch')
-    # plt.legend(['train', 'test'], loc='upper left')
-    # plt.savefig('img/%s-acc.png' % model_name)
-    # plt.cla()
-    # summarize history for loss
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.title(model_name + ' Model Loss')
-    plt.ylabel('loss')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig('./img/%s-loss.png' % model_name)
-    plt.cla()
+# def plot(history, model_name=''):
+#     # summarize history for accuracy
+#     # plt.plot(history.history['acc'])
+#     # plt.plot(history.history['val_acc'])
+#     # plt.title(model_name + ' Model Accuracy')
+#     # plt.ylabel('accuracy')
+#     # plt.xlabel('epoch')
+#     # plt.legend(['train', 'test'], loc='upper left')
+#     # plt.savefig('img/%s-acc.png' % model_name)
+#     # plt.cla()
+#     # summarize history for loss
+#     plt.plot(history.history['loss'])
+#     plt.plot(history.history['val_loss'])
+#     plt.title(model_name + ' Model Loss')
+#     plt.ylabel('loss')
+#     plt.xlabel('epoch')
+#     plt.legend(['train', 'test'], loc='upper left')
+#     plt.savefig('./img/%s-loss.png' % model_name)
+#     plt.cla()
 
 def load_data(prefix):
     all_label = cPickle.load(open(prefix + 'all_label.p', 'rb'))
@@ -83,7 +83,7 @@ def EncoderCNN(img_channels, img_rows, img_cols, batch_size, nb_epoch, nb_classe
 
     encoder = Model(input=input_img, output=encoded)
     # encoder.compile(optimizer=adam, loss='binary_crossentropy')
-    plot(history, 'Auto-Encoder')
+    # plot(history, 'Auto-Encoder')
     return autoencoder, encoder
 
 def normalize_data(X_normal, X_test, X_unlab):
